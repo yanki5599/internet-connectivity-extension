@@ -4,11 +4,21 @@ const bulbEl = document.getElementById('status-bulb');
 const urlEl = document.getElementById('site-url');
 const avgEl = document.getElementById('avg-latency');
 const canvas = document.getElementById('mini-graph');
+const toggleEl = document.getElementById('overlay-toggle');
 const ctx = canvas.getContext('2d');
 
 let latencyHistory = [];
 const MAX_HISTORY = 40;
 let currentUrl = "";
+
+// Load initial state
+chrome.storage.local.get(['showOverlay'], (result) => {
+  toggleEl.checked = result.showOverlay !== false;
+});
+
+toggleEl.addEventListener('change', () => {
+  chrome.storage.local.set({ showOverlay: toggleEl.checked });
+});
 
 // Initialize canvas size
 canvas.width = canvas.offsetWidth;

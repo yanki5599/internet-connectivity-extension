@@ -123,3 +123,23 @@
 .text-green { color: #10b981; }
 .text-yellow { color: #f59e0b; }
 .text-red { color: #ef4444; }
+
+.latency-close-btn {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  color: #64748b;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.latency-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.latency-close-btn svg {
+  display: block;
+}

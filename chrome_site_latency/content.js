@@ -7,8 +7,13 @@
   widget.id = 'latency-floating-widget';
   widget.innerHTML = `
     <div class="latency-header">
-      <span class="latency-title">Site Latency</span>
-      <span id="stability-val" class="stability-tag">Stable</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="latency-title">Latency</span>
+        <span id="stability-val" class="stability-tag">Stable</span>
+      </div>
+      <div id="latency-close-btn" class="latency-close-btn" title="Hide (Refresh to show again)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </div>
     </div>
     <div class="main-stat">
       <span id="latency-num" class="latency-num">--</span>
@@ -36,6 +41,26 @@
   const stabilityVal = widget.querySelector('#stability-val');
   const jitterVal = widget.querySelector('#jitter-val');
   const statusText = widget.querySelector('#status-text');
+  const closeBtn = widget.querySelector('#latency-close-btn');
+
+  // Load and listen for visibility changes
+  function updateVisibility() {
+    chrome.storage.local.get(['showOverlay'], (result) => {
+      widget.style.display = result.showOverlay !== false ? 'block' : 'none';
+    });
+  }
+
+  updateVisibility();
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.showOverlay) {
+      widget.style.display = changes.showOverlay.newValue !== false ? 'block' : 'none';
+    }
+  });
+
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    chrome.storage.local.set({ showOverlay: false });
+  });
 
   let history = [];
   const MAX_HISTORY = 60;
