@@ -78,11 +78,12 @@
   document.addEventListener('mouseup', dragEnd);
 
   function dragStart(e) {
-    if (e.target.closest('.latency-header') || e.target === widget) {
-      initialX = e.clientX - xOffset;
-      initialY = e.clientY - yOffset;
-      isDragging = true;
-    }
+    // Allow dragging from anywhere except the close button
+    if (e.target.closest('#latency-close-btn')) return;
+    
+    initialX = e.clientX - xOffset;
+    initialY = e.clientY - yOffset;
+    isDragging = true;
   }
 
   function drag(e) {
