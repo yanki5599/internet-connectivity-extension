@@ -1,0 +1,125 @@
+#latency-floating-widget {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 240px;
+  background: rgba(13, 13, 18, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  z-index: 2147483647;
+  color: #f8fafc;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  cursor: grab;
+  user-select: none;
+  transition: opacity 0.3s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#latency-floating-widget:active {
+  cursor: grabbing;
+}
+
+#latency-floating-widget.collapsed {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.latency-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.latency-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.stability-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+}
+
+.main-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.latency-num {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.latency-unit {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 11px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  color: #64748b;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.graph-box {
+  width: 100%;
+  height: 40px;
+  margin-top: 12px;
+  position: relative;
+}
+
+#latency-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.online { background: #10b981; box-shadow: 0 0 8px #10b981; }
+.offline { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+/* Status Colors */
+.text-green { color: #10b981; }
+.text-yellow { color: #f59e0b; }
+.text-red { color: #ef4444; }

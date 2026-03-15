@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ping Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Connection Time</h1>
+      <div id="status-bulb" class="bulb-offline"></div>
+    </header>
+    
+    <main>
+      <div class="latency-display">
+        <span id="latency-value">--</span>
+        <span class="unit">ms</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Status:</span>
+        <span id="status-label" class="status-offline">Offline</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Average:</span>
+        <span id="avg-latency">--</span>
+      </div>
+
+      <div class="graph-container">
+        <canvas id="mini-graph"></canvas>
+      </div>
+    </main>
+
+    <footer>
+      <p id="site-url">Waiting for tab...</p>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
