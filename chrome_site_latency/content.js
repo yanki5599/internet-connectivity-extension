@@ -174,7 +174,7 @@
 
     if (latency !== null) {
       latencyNum.textContent = latency;
-      minimizedInfo.textContent = latency + 'ms';
+      minimizedInfo.innerHTML = `${latency}<span class="unit">ms</span>`;
       const colorClass = (latency < 100 ? 'text-green' : latency < 300 ? 'text-yellow' : 'text-red');
       latencyNum.className = 'latency-num ' + colorClass;
       minimizedInfo.className = 'minimized-info ' + colorClass;
