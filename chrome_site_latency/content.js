@@ -175,12 +175,15 @@
     if (latency !== null) {
       latencyNum.textContent = latency;
       minimizedInfo.textContent = latency + 'ms';
-      latencyNum.className = 'latency-num ' + (latency < 100 ? 'text-green' : latency < 300 ? 'text-yellow' : 'text-red');
+      const colorClass = (latency < 100 ? 'text-green' : latency < 300 ? 'text-yellow' : 'text-red');
+      latencyNum.className = 'latency-num ' + colorClass;
+      minimizedInfo.className = 'minimized-info ' + colorClass;
       statusText.innerHTML = '<span class="status-indicator online"></span>Online';
     } else {
       latencyNum.textContent = '!!!';
       minimizedInfo.textContent = '!!!';
       latencyNum.className = 'latency-num text-red';
+      minimizedInfo.className = 'minimized-info text-red';
       statusText.innerHTML = '<span class="status-indicator offline"></span>Offline';
     }
 
