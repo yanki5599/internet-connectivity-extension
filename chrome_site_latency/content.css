@@ -119,12 +119,37 @@
 .online { background: #10b981; box-shadow: 0 0 8px #10b981; }
 .offline { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
 
-/* Status Colors */
-.text-green { color: #10b981; }
-.text-yellow { color: #f59e0b; }
-.text-red { color: #ef4444; }
+/* Minimized State */
+#latency-floating-widget.collapsed {
+  width: 80px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
 
-.latency-close-btn {
+#latency-floating-widget.collapsed .latency-header,
+#latency-floating-widget.collapsed .main-stat,
+#latency-floating-widget.collapsed .stats-grid,
+#latency-floating-widget.collapsed .graph-box {
+  display: none;
+}
+
+#latency-floating-widget.collapsed .minimized-info {
+  display: block;
+}
+
+.minimized-info {
+  display: none;
+  font-size: 14px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+/* Action Buttons */
+.latency-action-btn {
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
@@ -135,11 +160,17 @@
   justify-content: center;
 }
 
-.latency-close-btn:hover {
+.latency-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+.latency-action-btn.close:hover {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
 }
 
-.latency-close-btn svg {
-  display: block;
-}
+/* Status Colors */
+.text-green { color: #10b981; }
+.text-yellow { color: #f59e0b; }
+.text-red { color: #ef4444; }

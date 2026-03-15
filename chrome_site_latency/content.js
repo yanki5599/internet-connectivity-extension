@@ -11,18 +11,28 @@
         <span class="latency-title">Latency</span>
         <span id="stability-val" class="stability-tag">Stable</span>
       </div>
-      <div id="latency-close-btn" class="latency-close-btn" title="Hide (Refresh to show again)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      <div style="display: flex; gap: 4px;">
+        <div id="latency-min-btn" class="latency-action-btn" title="Minimize">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </div>
+        <div id="latency-close-btn" class="latency-action-btn close" title="Hide (Check popup settings)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
       </div>
     </div>
     <div class="main-stat">
       <span id="latency-num" class="latency-num">--</span>
       <span class="latency-unit">ms</span>
     </div>
+    <div id="minimized-info" class="minimized-info">--ms</div>
     <div class="stats-grid">
       <div class="stat-item">
-        <span class="stat-label">Jitter</span>
-        <span id="jitter-val" class="stat-value">--</span>
+        <span class="stat-label">Jitter / ISP</span>
+        <div id="isp-jitter-box" style="display: flex; gap: 4px; align-items: center;">
+          <span id="jitter-val" class="stat-value">--</span>
+          <span style="color: #475569">|</span>
+          <span id="isp-val" class="stat-value" title="Global ISP Health">--</span>
+        </div>
       </div>
       <div class="stat-item">
         <span class="stat-label">Status</span>
@@ -42,18 +52,42 @@
   const jitterVal = widget.querySelector('#jitter-val');
   const statusText = widget.querySelector('#status-text');
   const closeBtn = widget.querySelector('#latency-close-btn');
+  const minBtn = widget.querySelector('#latency-min-btn');
+  const ispVal = widget.querySelector('#isp-val');
+  const minimizedInfo = widget.querySelector('#minimized-info');
 
-  // Load and listen for visibility changes
-  function updateVisibility() {
-    chrome.storage.local.get(['showOverlay'], (result) => {
+  // Load and listen for changes
+  function updateState() {
+    chrome.storage.local.get(['showOverlay', 'isMinimized'], (result) => {
       widget.style.display = result.showOverlay !== false ? 'block' : 'none';
+      if (result.isMinimized) {
+        widget.classList.add('collapsed');
+      } else {
+        widget.classList.remove('collapsed');
+      }
     });
   }
 
-  updateVisibility();
+  updateState();
   chrome.storage.onChanged.addListener((changes) => {
     if (changes.showOverlay) {
       widget.style.display = changes.showOverlay.newValue !== false ? 'block' : 'none';
+    }
+    if (changes.isMinimized) {
+      if (changes.isMinimized.newValue) widget.classList.add('collapsed');
+      else widget.classList.remove('collapsed');
+    }
+  });
+
+  minBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isNowMinimized = !widget.classList.contains('collapsed');
+    chrome.storage.local.set({ isMinimized: isNowMinimized });
+  });
+
+  widget.addEventListener('dblclick', () => {
+    if (widget.classList.contains('collapsed')) {
+      chrome.storage.local.set({ isMinimized: false });
     }
   });
 
@@ -120,9 +154,9 @@
         url: window.location.origin 
       }, (response) => {
         if (chrome.runtime.lastError) {
-          processPing(null);
+          processPing(null, null);
         } else {
-          processPing(response.status === "online" ? response.latency : null);
+          processPing(response.status === "online" ? response.latency : null, response.ispLatency);
         }
       });
     } catch (e) {
@@ -131,7 +165,7 @@
     }
   }
 
-  function processPing(latency) {
+  function processPing(latency, ispLatency) {
     // Re-check context before updating UI
     if (!chrome.runtime?.id) return;
     
@@ -140,12 +174,19 @@
 
     if (latency !== null) {
       latencyNum.textContent = latency;
+      minimizedInfo.textContent = latency + 'ms';
       latencyNum.className = 'latency-num ' + (latency < 100 ? 'text-green' : latency < 300 ? 'text-yellow' : 'text-red');
       statusText.innerHTML = '<span class="status-indicator online"></span>Online';
     } else {
       latencyNum.textContent = '!!!';
+      minimizedInfo.textContent = '!!!';
       latencyNum.className = 'latency-num text-red';
       statusText.innerHTML = '<span class="status-indicator offline"></span>Offline';
+    }
+
+    if (ispLatency) {
+      ispVal.textContent = ispLatency + 'ms';
+      ispVal.className = 'stat-value ' + (ispLatency < 60 ? 'text-green' : ispLatency < 150 ? 'text-yellow' : 'text-red');
     }
 
     calculateMetrics();
