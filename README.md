@@ -15,9 +15,9 @@ A premium, interactive Chrome extension that continuously monitors your connecti
 - **🖱️ Draggable Interface**: Place the widget anywhere on your screen; it remembers its visibility settings across sessions.
 - **🎨 Dynamic Aesthetics**: Colors change dynamically based on latency (Green < 100ms, Yellow < 300ms, Red > 300ms).
 
-## 📸 Screenshots
+## 🛡️ Preview
 
-*(Add screenshots here)*
+![Floating Widget Preview](assets/preview.png)
 
 ## 🛠️ Installation
 
